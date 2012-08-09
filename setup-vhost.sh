@@ -56,6 +56,7 @@ server {
 END
 
 cat > /etc/php5/fpm/pool.d/$1.conf <<END
+[$1]
 listen = /var/run/php5-fpm-$1.sock
 user = $1
 group = $1
