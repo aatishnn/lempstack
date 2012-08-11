@@ -8,6 +8,7 @@ fi
 adduser $1
 
 mkdir "/home/$1/www/"
+chown -R $1:$1 "/home/$1/www/"
 
 cat > "/etc/nginx/sites-available/$2.conf" <<END
 server {
