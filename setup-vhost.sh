@@ -102,7 +102,7 @@ if [ "$mysql_db_create" == "y" ];then
 	echo Database Created.
 	echo -n "Import SQL File to this database?[y/n][n]:"
 	read mysql_import_sql
-	if [ "$mysql_db_create" == "y" ];then
+	if [ "$mysql_import_sql" == "y" ];then
 		echo -n "SQL File (Absolute Path)?:"
 		read mysql_import_location
 		mysql -u root -p"$mysql_root_password" "$mysql_db_name" < "$mysql_import_location"; 
