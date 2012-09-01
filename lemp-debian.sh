@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ `cat /etc/issue|awk 'NR==1 {print $1}'` != "Ubuntu" ];then
-cat >> /etc/apt/sources.list <<END
+cat >> /etc/apt/sources.list.d/dotdeb.list <<END
 deb http://packages.dotdeb.org stable all
 deb-src http://packages.dotdeb.org stable all
 END
