@@ -1,5 +1,7 @@
 #!/bin/bash
-
+function pause(){
+   read -p "$*"
+}
 if [ `cat /etc/issue|awk 'NR==1 {print $1}'` != "Ubuntu" ];then
 cat > /etc/apt/sources.list.d/dotdeb.list <<END
 deb http://packages.dotdeb.org stable all
@@ -170,14 +172,14 @@ env[HOSTNAME] = \$HOSTNAME
 php_admin_value[upload_max_filesize] = 32M
 END
 
-echo -n "Install PhpMyAdmin?[y/n][n]:"
+echo -n "Install PHPMyAdmin?[y/n][n]:"
 read pma_install
 if [ "$pma_install" == "y" ];then
 	echo Installing PhpMyAdmin
-	echo Don\'t select any options and select no to configure with dbcommon:
-	sleep 3
+	echo Don\'t select any options and select no to configure with dbcommon.
+	pause 'Press [Enter] key to continue after reading the above line ...'
 	apt-get install phpmyadmin
-	echo -n "Url for PhpMyAdmin Web Interface?":
+	echo -n "Domain for PHPMyAdmin Web Interface? Example:pma.domain.com :"
 	read pma_url
 	cat > /etc/nginx/sites-available/$pma_url.conf <<END
 server {
@@ -186,7 +188,7 @@ server {
     include php;
     access_log  /var/log/nginx/$pma_url-access.log;
     error_log  /var/log/nginx/$pma_url-error.log;
-      
+  
 }
 END
 	ln -s /etc/nginx/sites-available/$pma_url.conf /etc/nginx/sites-enabled/$pma_url.conf
@@ -209,7 +211,7 @@ chmod 755 /bin/setup-vhost
 echo Installation done.
 echo Use setup-vhost to configure virtual hosts.
 echo Running mysql_secure_installation. Use root password if set during install time.
-sleep 2
+pause 'Press [Enter] key to continue after reading the above line ...'
 mysql_secure_installation
 exit
 
