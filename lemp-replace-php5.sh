@@ -28,6 +28,7 @@ wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-xsl_5
 wget http://archives.dotdeb.org/dists/squeeze/php5-pecl/5.3.14/binary-i386/php5-suhosin_5.3.14-1~dotdeb.0_i386.deb
 wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-fpm_5.3.14-1~dotdeb.0_i386.deb
 wget http://archives.dotdeb.org/dists/squeeze/php5-pecl/5.3.14/binary-i386/php5-apc_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-common_5.3.14-1~dotdeb.0_i386.deb
 
 sudo dpkg -i --force-confnew *
 
