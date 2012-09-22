@@ -5,7 +5,7 @@ function pause(){
 apt-get update && apt-get upgrade
 apt-get remove apache2*
 
-apt-get remove php5 php5-mysql php5-sqlite php5-curl php-pear php5-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-suhosin php5-fpm php-apc apache2* php-cgi php-cli
+apt-get remove php5 php5-mysql php5-sqlite php5-curl php-pear php5-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-suhosin php5-fpm php-apc apache2* php5-cgi php5-cli
 
 cd $HOME
 mkdir dotdeb-php5
