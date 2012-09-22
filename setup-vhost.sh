@@ -10,6 +10,53 @@ adduser $1
 mkdir "/home/$1/www/"
 chown -R $1:$1 "/home/$1/www/"
 
+echo -n "Add www prefix and redirect to www by default?[y/n][y]:"
+read www_create
+if [ "$www_create" == "n" ];then
+cat > "/etc/nginx/sites-available/$2.conf" <<END
+server {
+    server_name $2;
+    root /home/$1/www/;
+    index index.php;
+ 
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+ 
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+ 
+        location / {
+                # This is cool because no php is touched for static content
+                try_files \$uri \$uri/ /index.php?q=\$uri&\$args;
+        }
+ 
+        location ~ \.php\$ {
+                #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+                include fastcgi_params;
+    		fastcgi_intercept_errors on;
+    		fastcgi_index index.php;
+    		fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+    		try_files \$uri =404;
+    		fastcgi_pass unix:/var/run/php5-fpm-$1.sock;
+    		error_page 404 /404page.html;
+        }
+ 
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)\$ {
+                expires max;
+                log_not_found off;
+        }
+    access_log  /var/log/nginx/$2-access.log;
+    error_log  /var/log/nginx/$2-error.log;
+     
+}
+END
+
+else
 cat > "/etc/nginx/sites-available/$2.conf" <<END
 server {
     server_name $2 www.$2;
@@ -55,6 +102,7 @@ server {
     
 }
 END
+fi
 
 cat > /etc/php5/fpm/pool.d/$1.conf <<END
 [$1]
