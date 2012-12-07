@@ -152,9 +152,11 @@ http {
 	error_log /var/log/nginx/error.log;
 	gzip on;
 	gzip_disable "msie6";
+	gzip_min_length 1100;
+	gzip_vary on;
 	gzip_proxied any;
 	gzip_comp_level 2;
-	gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+	gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript image/svg+xml application/x-font-ttf font/opentype application/vnd.ms-fontobject;
 	include /etc/nginx/conf.d/*.conf;
 	include /etc/nginx/sites-enabled/*;
 } 
