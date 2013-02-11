@@ -1,9 +1,19 @@
 #!/bin/bash 
+function check_root() {
+	if [ ! "`whoami`" = "root" ]
+	then
+	    echo "Root previlege required to run this script. Rerun as root."
+	    exit 1
+	fi
+}
+
+check_root
 
 if [ -z "$1" ];then
 	echo "Usage: setup-vhost <username> <hostname> (Without the www. prefix)"
 	exit   
 fi
+
 
 adduser $1
 
@@ -156,6 +166,3 @@ if [ "$mysql_db_create" == "y" ];then
 		mysql -u root -p"$mysql_root_password" "$mysql_db_name" < "$mysql_import_location"; 
 	fi
 fi
-
-
-
