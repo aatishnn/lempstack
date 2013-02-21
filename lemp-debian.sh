@@ -29,7 +29,7 @@ apt-get install nginx mysql-server php5 php5-mysql sqlite3 php5-sqlite php5-curl
 cat > /etc/php5/conf.d/apc.ini <<END
 extension=apc.so
 apc.enabled=1
-apc.shm_size=30
+apc.shm_size=30M
 END
 
 service mysql stop
