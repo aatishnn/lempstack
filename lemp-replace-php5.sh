@@ -2,34 +2,40 @@
 function pause(){
    read -p "$*"
 }
-
-function check_root() {
-	if [ ! "`whoami`" = "root" ]
-	then
-	    echo "Root previlege required to run this script. Rerun as root."
-	    exit 1
-	fi
-}
-check_root
-
-if [ `cat /etc/issue|awk 'NR==1 {print $1}'` != "Ubuntu" ];then
-cat > /etc/apt/sources.list.d/dotdeb.list <<END
-deb http://packages.dotdeb.org stable all
-deb-src http://packages.dotdeb.org stable all
-END
-wget http://www.dotdeb.org/dotdeb.gpg
-cat dotdeb.gpg | apt-key add -
-rm dotdeb.gpg
-fi
 apt-get update && apt-get upgrade
 apt-get remove apache2*
 
-apt-get install nginx mysql-server php5 php5-mysql sqlite3 php5-sqlite php5-curl php-pear php5-dev libcurl4-openssl-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-suhosin php5-fpm libpcre3-dev build-essential php-apc
+apt-get remove php5 php5-mysql php5-sqlite php5-curl php-pear php5-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-suhosin php5-fpm php-apc apache2* php5-cgi php5-cli php5-apc
+
+cd $HOME
+mkdir dotdeb-php5
+cd dotdeb-php5
+
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5_5.3.14-1~dotdeb.0_all.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-cgi_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-cli_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-mysql_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-sqlite_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-curl_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php-pear_5.3.14-1~dotdeb.0_all.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-dev_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-gd_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5-pecl/5.3.14/binary-i386/php5-imagick_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-imap_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-mcrypt_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-xmlrpc_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-xsl_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5-pecl/5.3.14/binary-i386/php5-suhosin_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-fpm_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5-pecl/5.3.14/binary-i386/php5-apc_5.3.14-1~dotdeb.0_i386.deb
+wget http://archives.dotdeb.org/dists/squeeze/php5/5.3.14/binary-i386/php5-common_5.3.14-1~dotdeb.0_i386.deb
+
+sudo dpkg -i --force-confnew *
 
 cat > /etc/php5/conf.d/apc.ini <<END
 extension=apc.so
 apc.enabled=1
-apc.shm_size=30M
+apc.shm_size=30
 END
 
 service mysql stop
@@ -226,3 +232,6 @@ echo Running mysql_secure_installation. Use root password if set during install 
 pause 'Press [Enter] key to continue after reading the above line ...'
 mysql_secure_installation
 exit
+
+
+
