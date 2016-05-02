@@ -41,7 +41,7 @@ server {
     ssl_session_cache shared:SSL:50m;
     ssl_session_tickets off;
 
-    # Diffie-Hellman parameter for DHE ciphersuites - openssl dhparam -out /etc/ssl/certs/dhparams.pem 4096
+    # Diffie-Hellman parameter for DHE ciphersuites - openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
     ssl_dhparam /etc/ssl/certs/dhparam.pem;
 
     # modern configuration. tweak to your needs.

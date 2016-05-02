@@ -16,8 +16,12 @@ apt-get update && apt-get upgrade
 apt-get remove apache2*
 
 apt-get install nginx mysql-server php5 php5-mysql sqlite3 php5-sqlite php5-curl php-pear php5-dev libcurl4-openssl-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-fpm libpcre3-dev build-essential php-apc
+
 wget -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/suhosin/releases/latest | grep 'tarball_url' | sed 's/"tarball_url": //g' | sed 's/"//g' | sed 's/,//g'`
-#suhosin has to be installed manually
+#suhosin has to be installed manually, see https://suhosin.org/stories/install.html#manual-installation
+
+#TODO: letsencrypt installation
+#TODO: dialog for creating dhparam
 
 cat > /etc/php5/fpm/conf.d/20-apcu.ini <<END
 extension=apcu.so
