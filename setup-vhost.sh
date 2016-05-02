@@ -21,7 +21,61 @@ mkdir "/home/$1/www/"
 chown -R $1:$1 "/home/$1/www/"
 
 cat > "/etc/nginx/sites-available/$2.conf" <<END
+server{
+    listen 80;
+    listen [::]:80;
+    server_name $2;
+
+    # Redirect all HTTP requests to HTTPS with a 301 Moved Permanently response.
+    return 301 https://$host$request_uri;
+}
+
 server {
+    listen 443 ssl spdy;
+    listen [::]:443 ssl spdy;
+
+    # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
+    ssl_certificate /etc/letsencrypt/live/$2/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$2/privkey.pem;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+
+    # Diffie-Hellman parameter for DHE ciphersuites - openssl dhparam -out /etc/ssl/certs/dhparams.pem 4096
+    ssl_dhparam /etc/ssl/certs/dhparam.pem;
+
+    # modern configuration. tweak to your needs.
+    ssl_protocols TLSv1.2;
+
+    # taken from https://mozilla.github.io/server-side-tls/ssl-config-generator/
+    ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
+#    ssl_ciphers "HIGH:!eNULL:!aNULL:!SHA1:!AES128";
+
+    ssl_prefer_server_ciphers on;
+
+    # HSTS (ngx_http_headers_module is required) (15768000 seconds = 6 months)
+#    add_header Strict-Transport-Security max-age=15768000;
+    # taken from https://cipherli.st/
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
+
+    # OCSP Stapling ---
+    # fetch OCSP records from URL in ssl_certificate and cache them
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    ## verify chain of trust of OCSP response using Root CA and Intermediate certs
+#    ssl_trusted_certificate /path/to/root_CA_cert_plus_intermediates;
+
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+
+    ssl_ecdh_curve secp384r1;
+
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+
+
+
     server_name $2;
     root /home/$1/www/;
     index index.php;
@@ -57,6 +111,7 @@ server {
                 expires max;
                 log_not_found off;
         }
+
     access_log  /var/log/nginx/$2-access.log;
     error_log  /var/log/nginx/$2-error.log;
 }
