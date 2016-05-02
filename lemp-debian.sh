@@ -28,56 +28,6 @@ service mysql stop
 service nginx stop
 service php5-fpm stop
 
-cat > /etc/mysql/my.cnf <<END
-[client]
-port                            = 3306
-socket                          = /var/run/mysqld/mysqld.sock
-
-[mysqld_safe]
-socket                          = /var/run/mysqld/mysqld.sock
-nice                            = 0
-
-[mysqld]
-user                            = mysql
-pid-file                        = /var/run/mysqld/mysqld.pid
-socket                          = /var/run/mysqld/mysqld.sock
-port                            = 3306
-basedir                         = /usr
-datadir                         = /var/lib/mysql
-tmpdir                          = /tmp
-lc-messages-dir                 = /usr/share/mysql
-skip-external-locking
-bind-address                    = 127.0.0.1
-default-storage-engine          = innodb
-key_buffer                      = 1M
-max_allowed_packet              = 16M
-thread_stack                    = 64K
-thread_cache                    = 1
-skip-innodb
-max_connections                 = 25
-query_cache_limit               = 128k
-query_cache_size                = 1M
-query_cache_min_res_unit        = 0
-tmp_table_size                  = 1M
-max_heap_table_size             = 1M
-table_cache                     = 256
-concurrent_insert               = 2
-max_allowed_packet              = 1M
-sort_buffer_size                = 64K
-read_buffer_size                = 256K
-read_rnd_buffer_size            = 256K
-net_buffer_length               = 2K
-expire_logs_days                = 10
-max_binlog_size                 = 100M
-[mysqldump]
-quick
-quote-names
-[mysql]
-[isamchk]
-key_buffer                      = 16M
-!includedir /etc/mysql/conf.d/
-END
-
 cat > /etc/nginx/php <<END
 index index.php;
 
