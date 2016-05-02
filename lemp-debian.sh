@@ -200,8 +200,6 @@ service mysql start
 #wget https://raw.github.com/aatishnn/lempstack/master/setup-vhost.sh -O /bin/setup-vhost
 #chmod 755 /bin/setup-vhost
 
-echo Installation done.
-echo Use setup-vhost to configure virtual hosts.
 echo Running mysql_secure_installation. Use root password if set during install time.
 pause 'Press [Enter] key to continue after reading the above line ...'
 mysql_secure_installation
@@ -221,4 +219,6 @@ if ! [ "$dhparam" == "n" ];then
     fi
 fi
 
+echo Installation done.
+echo Use setup-vhost to configure virtual hosts.
 exit
