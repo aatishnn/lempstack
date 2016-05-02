@@ -31,6 +31,11 @@ wget -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/s
 #TODO: dialog for creating dhparam - openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 
 
+# cat > /etc/php5/mods-available/suhosin.ini <<END
+# extension=suhosin.so
+# END
+#
+# ln -s /etc/php5/mods-available/suhosin.ini /etc/php5/fpm/conf.d/20-suhosin.ini
 
 service mysql stop
 service nginx stop
