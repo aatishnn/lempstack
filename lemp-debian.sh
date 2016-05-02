@@ -1,8 +1,4 @@
 #!/bin/bash
-#TODO: letsencrypt installation
-#TODO: suhosin installation
-#TODO: dialog for creating dhparam - openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
-
 function pause(){
    read -p "$*"
 }
@@ -22,11 +18,12 @@ apt-get update && apt-get upgrade
 apt-get install \
     build-essential \
     curl \
-    git\
+    git \
     libcurl4-openssl-dev \
     libpcre3-dev \
     mysql-server \
     nginx \
+    openssl \
     php-apc \
     php-pear \
     php5 \
@@ -41,21 +38,30 @@ apt-get install \
     php5-xsl \
     wget
 
-# git clone https://github.com/letsencrypt/letsencrypt
-# cd letsencrypt
-# ./letsencrypt-auto --help
-# cd ..
-# rm -r letsencrypt
+#letsencrypt installation
+git clone https://github.com/letsencrypt/letsencrypt
+cd letsencrypt
+./letsencrypt-auto --help
+cd ..
+rm -r letsencrypt
 
-wget -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/suhosin/releases/latest | grep 'tarball_url' | sed 's/"tarball_url": //g' | sed 's/"//g' | sed 's/,//g'`
-#suhosin has to be installed manually, see https://suhosin.org/stories/install.html#manual-installation
-# rm suhosin.tar.gz
+#php-suhosin installation
+wget -q -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/suhosin/releases/latest | grep 'tarball_url' | sed 's/"tarball_url": //g' | sed 's/"//g' | sed 's/,//g'`
+tar -xzf suhosin.tar.gz
+cd stefanesser-suhosin-*
+phpize
+./configure
+make
+make install
+cd ..
+rm suhosin.tar.gz
+rm -r stefanesser-suhosin-*
 
-# cat > /etc/php5/mods-available/suhosin.ini <<END
-# extension=suhosin.so
-# END
-#
-# ln -s /etc/php5/mods-available/suhosin.ini /etc/php5/fpm/conf.d/20-suhosin.ini
+cat > /etc/php5/mods-available/suhosin.ini <<END
+extension=suhosin.so
+END
+
+ln -s /etc/php5/mods-available/suhosin.ini /etc/php5/fpm/conf.d/20-suhosin.ini
 
 service mysql stop
 service nginx stop
@@ -97,6 +103,7 @@ index index.php;
         }
 END
 
+#gzip_types based on http://arstechnica.com/gadgets/2012/11/how-to-set-up-a-safe-and-secure-web-server/3/
 cat > /etc/nginx/nginx.conf <<END
 user www-data;
 worker_processes auto;
@@ -156,7 +163,7 @@ env[HOSTNAME] = \$HOSTNAME
 php_admin_value[upload_max_filesize] = 128M
 END
 
-echo -n "Install PHPMyAdmin?[y/n][n]:"
+echo -n "Install PHPMyAdmin? [y/n][n]:"
 read pma_install
 if [ "$pma_install" == "y" ];then
         echo Installing PhpMyAdmin
@@ -198,4 +205,20 @@ echo Use setup-vhost to configure virtual hosts.
 echo Running mysql_secure_installation. Use root password if set during install time.
 pause 'Press [Enter] key to continue after reading the above line ...'
 mysql_secure_installation
+
+echo mysql_secure_installation done.
+echo "Warning: The next step can take several hours! You can do this later by executing 'openssl dhparam -out /etc/ssl/certs/dhparam.pem [numbits]'."
+echo -n "Do you want to create /etc/ssl/certs/dhparam.pem now? Warning: This can take several hours! [y/n][y]"
+read dhparam
+if ! [ "$dhparam" == "n" ];then
+    echo -n "How many bits long should the dhparam file be? [4096]"
+    read numbits
+    regex='^[0-9]+$'
+    if ! [ "$numbits" =~ "$regex" ];then
+        openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+    else
+        openssl dhparam -out /etc/ssl/certs/dhparam.pem $numbits
+    fi
+fi
+
 exit
