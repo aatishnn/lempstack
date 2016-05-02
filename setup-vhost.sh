@@ -6,7 +6,6 @@ function check_root() {
             exit 1
         fi
 }
-
 check_root
 
 if [ -z "$1" ];then
@@ -19,6 +18,9 @@ adduser $1
 
 mkdir "/home/$1/www/"
 chown -R $1:$1 "/home/$1/www/"
+
+#TODO: letsencrypt setup
+#~/.local/share/letsencrypt/bin/letsencrypt certonly --rsa-key-size 4096 --standalone --standalone-supported-challenges tls-sni-01 -d $2
 
 cat > "/etc/nginx/sites-available/$2.conf" <<END
 server{
