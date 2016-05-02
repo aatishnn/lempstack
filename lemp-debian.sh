@@ -30,11 +30,7 @@ wget -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/s
 #TODO: suhosin installation
 #TODO: dialog for creating dhparam - openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 
-cat > /etc/php5/fpm/conf.d/20-apcu.ini <<END
-extension=apcu.so
-apc.enabled=1
-apc.shm_size=32M
-END
+
 
 service mysql stop
 service nginx stop
