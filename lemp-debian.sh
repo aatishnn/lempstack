@@ -28,7 +28,7 @@ service mysql stop
 service nginx stop
 service php5-fpm stop
 
-cat > /etc/my.cnf <<END
+cat > /etc/mysql/my.cnf <<END
 [client]
 port                            = 3306
 socket                          = /var/run/mysqld/mysqld.sock
