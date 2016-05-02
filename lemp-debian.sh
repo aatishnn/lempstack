@@ -120,7 +120,7 @@ pm.process_idle_timeout = 3s;
 pm.max_requests = 500
 chdir = /var/www/
 env[HOSTNAME] = \$HOSTNAME
-php_admin_value[upload_max_filesize] = 32M
+php_admin_value[upload_max_filesize] = 128M
 END
 
 echo -n "Install PHPMyAdmin?[y/n][n]:"
