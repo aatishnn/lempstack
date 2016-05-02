@@ -15,7 +15,7 @@ check_root
 apt-get remove apache2*
 apt-get update && apt-get upgrade
 
-apt-get install git wget curl nginx mysql-server php5 php5-mysql sqlite3 php5-sqlite php5-curl php-pear php5-dev libcurl4-openssl-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-fpm libpcre3-dev build-essential php-apc
+apt-get install git wget curl nginx mysql-server php5 php5-mysql php5-curl php-pear libcurl4-openssl-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-fpm libpcre3-dev build-essential php-apc
 
 # apt-get install git
 #
