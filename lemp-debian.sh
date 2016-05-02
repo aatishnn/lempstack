@@ -50,11 +50,13 @@ skip-external-locking
 bind-address                    = 127.0.0.1
 default-storage-engine          = innodb
 key_buffer                      = 1M
-query_cache_size                = 1M
-query_cache_limit               = 128k
-max_connections                 = 25
+max_allowed_packet              = 16M
+thread_stack                    = 64K
 thread_cache                    = 1
 skip-innodb
+max_connections                 = 25
+query_cache_limit               = 128k
+query_cache_size                = 1M
 query_cache_min_res_unit        = 0
 tmp_table_size                  = 1M
 max_heap_table_size             = 1M
@@ -65,13 +67,11 @@ sort_buffer_size                = 64K
 read_buffer_size                = 256K
 read_rnd_buffer_size            = 256K
 net_buffer_length               = 2K
-thread_stack                    = 64K
 expire_logs_days                = 10
 max_binlog_size                 = 100M
 [mysqldump]
 quick
 quote-names
-max_allowed_packet              = 16M
 [mysql]
 [isamchk]
 key_buffer                      = 16M
