@@ -17,8 +17,6 @@ apt-get update && apt-get upgrade
 
 apt-get install git wget curl nginx mysql-server php5 php5-mysql php5-curl php-pear libcurl4-openssl-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-fpm libpcre3-dev build-essential php-apc
 
-# apt-get install git
-#
 # git clone https://github.com/letsencrypt/letsencrypt
 # cd letsencrypt
 # ./letsencrypt-auto --help
@@ -35,7 +33,7 @@ wget -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/s
 cat > /etc/php5/fpm/conf.d/20-apcu.ini <<END
 extension=apcu.so
 apc.enabled=1
-apc.shm_size=30M
+apc.shm_size=32M
 END
 
 service mysql stop
