@@ -66,7 +66,7 @@ END
 
 cat > /etc/nginx/nginx.conf <<END
 user www-data;
-worker_processes 1;
+worker_processes auto;
 pid /var/run/nginx.pid;
 
 events {
@@ -75,7 +75,6 @@ events {
 }
 
 http {
-
         sendfile on;
         tcp_nopush on;
         tcp_nodelay on;
