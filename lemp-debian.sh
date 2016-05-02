@@ -1,4 +1,8 @@
 #!/bin/bash
+#TODO: letsencrypt installation
+#TODO: suhosin installation
+#TODO: dialog for creating dhparam - openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+
 function pause(){
    read -p "$*"
 }
@@ -15,7 +19,27 @@ check_root
 apt-get remove apache2*
 apt-get update && apt-get upgrade
 
-apt-get install git wget curl nginx mysql-server php5 php5-mysql php5-curl php-pear libcurl4-openssl-dev php5-gd php5-imagick php5-imap php5-mcrypt php5-xmlrpc php5-xsl php5-fpm libpcre3-dev build-essential php-apc
+apt-get install \
+    build-essential \
+    curl \
+    git\
+    libcurl4-openssl-dev \
+    libpcre3-dev \
+    mysql-server \
+    nginx \
+    php-apc \
+    php-pear \
+    php5 \
+    php5-curl \
+    php5-fpm \
+    php5-gd \
+    php5-imagick \
+    php5-imap \
+    php5-mcrypt \
+    php5-mysql \
+    php5-xmlrpc \
+    php5-xsl \
+    wget
 
 # git clone https://github.com/letsencrypt/letsencrypt
 # cd letsencrypt
@@ -25,11 +49,7 @@ apt-get install git wget curl nginx mysql-server php5 php5-mysql php5-curl php-p
 
 wget -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/suhosin/releases/latest | grep 'tarball_url' | sed 's/"tarball_url": //g' | sed 's/"//g' | sed 's/,//g'`
 #suhosin has to be installed manually, see https://suhosin.org/stories/install.html#manual-installation
-
-#TODO: letsencrypt installation
-#TODO: suhosin installation
-#TODO: dialog for creating dhparam - openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
-
+# rm suhosin.tar.gz
 
 # cat > /etc/php5/mods-available/suhosin.ini <<END
 # extension=suhosin.so
