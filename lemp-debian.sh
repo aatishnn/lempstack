@@ -48,7 +48,7 @@ tmpdir                          = /tmp
 lc-messages-dir                 = /usr/share/mysql
 skip-external-locking
 bind-address                    = 127.0.0.1
-default-storage-engine          = myisam
+default-storage-engine          = innodb
 key_buffer                      = 1M
 query_cache_size                = 1M
 query_cache_limit               = 128k
