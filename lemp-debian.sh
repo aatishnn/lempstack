@@ -162,7 +162,9 @@ mkdir /var/www
 chown -R www-data:www-data /var/www
 mkdir /var/log/nginx
 sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php5/fpm/php.ini
-sed -i 's/#cgi.fix_pathinfo=0/cgi.fix_pathinfo=0/g' /etc/php5/fpm/php.ini
+sed -i 's/;cgi.fix_pathinfo=0/cgi.fix_pathinfo=0/g' /etc/php5/fpm/php.ini
+sed -i 's/opcache.enable=0/opcache.enable=1/g' /etc/php5/fpm/php.ini
+sed -i 's/;opcache.enable=1/opcache.enable=1/g' /etc/php5/fpm/php.ini
 service php5-fpm start
 service nginx restart
 service mysql start
