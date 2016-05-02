@@ -2,7 +2,7 @@
 function check_root() {
         if [ ! "`whoami`" = "root" ]
         then
-            echo "Root previlege required to run this script. Rerun as root."
+            echo "Root privilege required to run this script. Rerun as root."
             exit 1
         fi
 }
