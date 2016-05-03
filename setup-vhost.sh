@@ -155,21 +155,21 @@ echo Virtual Host Created. Upload Files to /home/$1/www .
 echo -n "Create MySQL database for user? [y/n][n]:"
 read mysql_db_create
 if [ "$mysql_db_create" == "y" ];then
-        echo -n "MySQL Root Password: "
+        echo -n "MySQL root password: "
         read mysql_root_password
-        echo -n "MySQL Username: "
+        echo -n "MySQL username: "
         read mysql_user
         echo -n "Password: "
         read mysql_password
-        echo -n "MySQL Database Name: "
+        echo -n "MySQL database name: "
         read mysql_db_name
         mysql -u root -p"$mysql_root_password" mysql -e "CREATE DATABASE $mysql_db_name; GRANT ALL ON  $mysql_db_name.* TO $mysql_user@localhost IDENTIFIED BY '$mysql_password';FLUSH PRIVILEGES;"
         echo Database Created.
-        echo -n "Import SQL File to this database?[y/n][n]:"
+        echo -n "Import SQL file to this database? [y/n][n]:"
         read mysql_import_sql
         if [ "$mysql_import_sql" == "y" ];then
-                echo -n "SQL File (Absolute Path)?:"
+                echo -n "SQL file (absolute path)?:"
                 read mysql_import_location
-                mysql -u root -p"$mysql_root_password" "$mysql_db_name" < "$mysql_import_location";
+                mysql -u root -p "$mysql_root_password" "$mysql_db_name" < "$mysql_import_location";
         fi
 fi
