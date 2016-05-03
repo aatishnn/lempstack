@@ -20,7 +20,9 @@ mkdir "/home/$1/www/"
 chown -R $1:$1 "/home/$1/www/"
 
 #TODO: letsencrypt setup
-#~/.local/share/letsencrypt/bin/letsencrypt certonly --rsa-key-size 4096 --standalone --standalone-supported-challenges tls-sni-01 -d $2
+# service nginx stop
+# ~/.local/share/letsencrypt/bin/letsencrypt certonly --rsa-key-size 4096 --standalone --standalone-supported-challenges tls-sni-01 -d $2
+# service nginx start
 
 cat > "/etc/nginx/sites-available/$2.conf" <<END
 server{
@@ -150,7 +152,7 @@ service nginx reload
 service php5-fpm restart
 
 echo Virtual Host Created. Upload Files to /home/$1/www .
-echo -n "Create MySQL database for user?[y/n][n]:"
+echo -n "Create MySQL database for user? [y/n][n]:"
 read mysql_db_create
 if [ "$mysql_db_create" == "y" ];then
         echo -n "MySQL Root Password: "
