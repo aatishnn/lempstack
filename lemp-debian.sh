@@ -30,7 +30,6 @@ apt-get install \
     php5-curl \
     php5-fpm \
     php5-gd \
-    php5-imagick \
     php5-imap \
     php5-mcrypt \
     php5-mysql \
