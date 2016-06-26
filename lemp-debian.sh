@@ -12,6 +12,10 @@ function check_root() {
 }
 check_root
 
+
+#TODO: add add backports to apt sources conditionally
+
+
 apt-get remove apache2*
 apt-get update && apt-get upgrade
 
@@ -36,12 +40,32 @@ apt-get install \
     php5-xsl \
     wget
 
-#letsencrypt installation
-git clone https://github.com/letsencrypt/letsencrypt
-cd letsencrypt
-./letsencrypt-auto --help
-cd ..
-rm -r letsencrypt
+#certbot installation
+apt-get install certbot -t jessie-backports -y
+
+#systemd timer
+cat > /etc/systemd/system/certbot.service <<END
+[Unit]
+Description=Automatic certification renewal for letsencrypt
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/certbot renew --quiet --post-hook "service nginx reload"
+END
+
+cat > /etc/systemd/system/certbot.timer <<END
+[Unit]
+Description=Run cerbot.service daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+END
+
+systemctl enable certbot.timer
 
 #php-suhosin installation
 wget -q -O suhosin.tar.gz `curl --silent https://api.github.com/repos/stefanesser/suhosin/releases/latest | grep 'tarball_url' | sed 's/"tarball_url": //g' | sed 's/"//g' | sed 's/,//g'`

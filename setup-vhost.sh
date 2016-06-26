@@ -19,11 +19,88 @@ adduser $1
 mkdir "/home/$1/www/"
 chown -R $1:$1 "/home/$1/www/"
 
-#TODO: letsencrypt setup
-# service nginx stop
-# ~/.local/share/letsencrypt/bin/letsencrypt certonly --rsa-key-size 4096 --standalone --standalone-supported-challenges tls-sni-01 -d $2
-# service nginx start
 
+cat > /etc/php5/fpm/pool.d/$1.conf <<END
+[$1]
+listen = /var/run/php5-fpm-$1.sock
+user = $1
+group = $1
+listen.owner = www-data
+listen.group = www-data
+listen.mode = 0666
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 3
+pm.min_spare_servers = 2
+pm.max_spare_servers = 4
+pm.max_requests = 200
+listen.backlog = -1
+request_terminate_timeout = 120s
+rlimit_files = 131072
+rlimit_core = unlimited
+catch_workers_output = yes
+env[HOSTNAME] = \$HOSTNAME
+env[TMP] = /tmp
+env[TMPDIR] = /tmp
+env[TEMP] = /tmp
+END
+
+#create http config for certbot
+cat > "/etc/nginx/sites-available/$2.conf" <<END
+server{
+    listen 80;
+    listen [::]:80;
+    server_name $2;
+    root /home/$1/www/;
+    index index.php;
+
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+
+        location / {
+                # This is cool because no php is touched for static content
+                try_files \$uri \$uri/ /index.php?q=\$uri&\$args;
+        }
+
+        location ~ \.php\$ {
+                #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+                include fastcgi_params;
+                fastcgi_intercept_errors on;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+                try_files \$uri =404;
+                fastcgi_pass unix:/var/run/php5-fpm-$1.sock;
+                error_page 404 /404page.html;
+        }
+
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)\$ {
+                expires max;
+                log_not_found off;
+        }
+
+    access_log  /var/log/nginx/$2-access.log;
+    error_log  /var/log/nginx/$2-error.log;
+}
+END
+
+ln -s /etc/nginx/sites-available/$2.conf /etc/nginx/sites-enabled/$2.conf
+
+service nginx reload
+#service php5-fpm restart
+service php5-fpm reload
+
+#certbot
+certbot certonly --rsa-key-size 4096 --webroot -w /home/$1/www/ -d $2
+
+#replace non-https config with https-config
 cat > "/etc/nginx/sites-available/$2.conf" <<END
 server{
     listen 80;
@@ -121,35 +198,7 @@ server {
 }
 END
 
-cat > /etc/php5/fpm/pool.d/$1.conf <<END
-[$1]
-listen = /var/run/php5-fpm-$1.sock
-user = $1
-group = $1
-listen.owner = www-data
-listen.group = www-data
-listen.mode = 0666
-pm = dynamic
-pm.max_children = 5
-pm.start_servers = 3
-pm.min_spare_servers = 2
-pm.max_spare_servers = 4
-pm.max_requests = 200
-listen.backlog = -1
-request_terminate_timeout = 120s
-rlimit_files = 131072
-rlimit_core = unlimited
-catch_workers_output = yes
-env[HOSTNAME] = \$HOSTNAME
-env[TMP] = /tmp
-env[TMPDIR] = /tmp
-env[TEMP] = /tmp
-END
-
-ln -s /etc/nginx/sites-available/$2.conf /etc/nginx/sites-enabled/$2.conf
-
 service nginx reload
-service php5-fpm restart
 
 echo Virtual Host Created. Upload Files to /home/$1/www .
 echo -n "Create MySQL database for user? [y/n][n]:"
