@@ -55,7 +55,7 @@ END
 
 cat > /etc/systemd/system/certbot.timer <<END
 [Unit]
-Description=Run cerbot.service daily
+Description=Run certbot.service daily
 
 [Timer]
 OnCalendar=daily
