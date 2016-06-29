@@ -45,7 +45,7 @@ env[TMPDIR] = /tmp
 env[TEMP] = /tmp
 END
 
-#create http config for certbot
+#create non-https config for certbot
 cat > "/etc/nginx/sites-available/$2.conf" <<END
 server{
     listen 80;
@@ -100,7 +100,7 @@ service php5-fpm reload
 #certbot
 certbot certonly --rsa-key-size 4096 --webroot -w /home/$1/www/ -d $2
 
-#replace non-https config with https-config
+#replace non-https config with https config
 cat > "/etc/nginx/sites-available/$2.conf" <<END
 server{
     listen 80;
