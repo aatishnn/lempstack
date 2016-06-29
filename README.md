@@ -10,11 +10,11 @@ http://linuxdo.blogspot.com/2012/08/optimized-lemp-installer-for.html
 * modified for Debian 8 Jessie
 * updated configuration
 * removed unnecessary packages
-* changed [php-suhosin](https://suhosin.org) installation to not use dotdeb.org
-* enabled OPcache
+* changed [php-suhosin](https://suhosin.org/) installation to not use dotdeb.org
+* enabled [OPcache](https://secure.php.net/manual/en/intro.opcache.php)
 * added IPv6
-* added SPDY (will be changed to http2 as soon as a fitting nginx is available in the stable repo)
-* added TLS via letsencrypt (installs certbot, automates renewal, adds new certificate at virtual host creation)
+* added [SPDY](https://developers.google.com/speed/spdy/) (will be changed to [HTTP/2](https://http2.github.io/) as soon as a fitting nginx is available in the stable repo)
+* added TLS via [letsencrypt](https://letsencrypt.org/) (installs [certbot](https://certbot.eff.org/), automates renewal, adds new certificate at virtual host creation)
 * creation of (bigger) dhparam.pem
 
 ## Quick Install
