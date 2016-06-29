@@ -10,7 +10,7 @@ http://linuxdo.blogspot.com/2012/08/optimized-lemp-installer-for.html
 * modified for Debian 8 Jessie
 * updated configuration
 * removed unnecessary packages
-* changed [php-suhosin](suhosin.org) installation to not use dotdeb.org
+* changed [php-suhosin](https://suhosin.org) installation to not use dotdeb.org
 * enabled OPcache
 * added IPv6
 * added SPDY (will be changed to http2 as soon as a fitting nginx is available in the stable repo)
