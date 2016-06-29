@@ -14,7 +14,7 @@ http://linuxdo.blogspot.com/2012/08/optimized-lemp-installer-for.html
 * enabled OPcache
 * added IPv6
 * added SPDY (will be changed to http2 as soon as a fitting nginx is available in the stable repo)
-* added TLS via letsencrypt (installs certbot, automates renewal, adds new certificate at subdomain creation)
+* added TLS via letsencrypt (installs certbot, automates renewal, adds new certificate at virtual host creation)
 * creation of (bigger) dhparam.pem
 
 ## Quick Install
