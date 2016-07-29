@@ -9,7 +9,7 @@ function check_root() {
 check_root
 
 if [ -z "$1" ];then
-        echo "Usage: setup-vhost <username> <hostname> (Without the www. prefix)"
+        echo "Usage: setup-vhost <username> <hostname>"
         exit
 fi
 
@@ -98,6 +98,7 @@ service nginx reload
 service php5-fpm reload
 
 #certbot
+echo Fetching letsencrypt.org certificate for $2
 certbot certonly --rsa-key-size 4096 --webroot -w /home/$1/www/ -d $2
 
 #replace non-https config with https config
