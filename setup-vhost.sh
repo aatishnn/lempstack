@@ -102,7 +102,7 @@ echo Fetching letsencrypt.org certificate for $2
 certbot certonly --rsa-key-size 4096 --webroot -w /home/$1/www/ -d $2
 
 #replace non-https config with https config
-cat > "/etc/nginx/sites-available/$2.conf" <<END
+cat > "/etc/nginx/sites-available/$2.conf" <<'END'
 server{
     listen 80;
     listen [::]:80;
@@ -112,6 +112,9 @@ server{
     return 301 https://$host$request_uri;
 }
 
+END
+
+cat >> "/etc/nginx/sites-available/$2.conf" <<END
 server {
     listen 443 ssl spdy;
     listen [::]:443 ssl spdy;
